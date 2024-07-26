@@ -1,21 +1,22 @@
-def find_pairs(n):
+def generate_password(n):
     pairs = []
-    # Перебираем все уникальные пары чисел от 1 до 20
-    for i in range(1, 21):
-        for j in range(i + 1, 21):  # j начинается с i+1, чтобы избежать повторений и перестановок
-            if (i + j) % n == 0:
+    used_numbers = set()
+
+    for i in range(1, n):
+        for j in range(i + 1, n):
+            if n % (i + j) == 0 and i not in used_numbers and j not in used_numbers:
                 pairs.append(f"{i}{j}")
-    return "".join(pairs)
+                used_numbers.add(i)
+                used_numbers.add(j)
 
-# Примеры использования функции и вывод результата
-results = {}
-for n in range(3, 21):
-    result = find_pairs(n)
-    results[n] = result
-    print(f"{n} - {result}")
+    return ''.join(pairs)
 
-# Для проверки конкретных значений
-expected_results = {
+
+# Примеры использования функции
+for num in range(3, 21):
+    print(f"{num} - {generate_password(num)}")
+
+results = {
     3: "12",
     4: "13",
     5: "1423",
@@ -36,10 +37,8 @@ expected_results = {
     20: "13141911923282183731746416515614713812911"
 }
 
-# Проверка совпадений с ожидаемыми результатами
-for n, expected in expected_results.items():
-    if results[n] == expected:
-        print(f"Test passed for n={n}")
-    else:
-        print(f"Test failed for n={n}: got {results[n]}, expected {expected}")
+for num in range(3, 21):
+    password = generate_password(num)
+    expected = results[num]
+    print(f"{num} - {password} - {'Correct' if password == expected else 'Incorrect'}")
 
