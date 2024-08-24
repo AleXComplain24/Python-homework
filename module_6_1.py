@@ -1,44 +1,47 @@
 # Базовый класс для всех животных
 class Animal:
     def __init__(self, name):
-        self.alive = True # Живой
-        self.fed = False # Не накормлен
-        self.name = name # Имя животного
+        self.alive = True  # Живой
+        self.fed = False  # Не накормлен
+        self.name = name  # Имя животного
 
-# Базовый класс для всех растений
-class Plant:
-    def __init__(self, name):
-        self.edible = False # По умолчанию несъедобное
-        self.name = name # Имя растения
-
-# Класс млекопитающих, наследюущий от Animal
-class Mammal(Animal):
     def eat(self, food):
-        if food.edible:
+        if isinstance(food, Plant) and food.edible:
             print(f"{self.name} съел {food.name}")
             self.fed = True
         else:
             print(f"{self.name} не стал есть {food.name}")
             self.alive = False
 
-# Класс хищников, наследюущий от Animal
+
+# Базовый класс для всех растений
+class Plant:
+    def __init__(self, name):
+        self.edible = False  # По умолчанию несъедобное
+        self.name = name  # Имя растения
+
+
+# Класс млекопитающих, наследующий от Animal
+class Mammal(Animal):
+    pass  # Дополнительного поведения пока не требуется
+
+
+# Класс хищников, наследующий от Animal
 class Predator(Animal):
-    def eat(self, food):
-        if food.edible:
-            print(f"{self.name} сьъел {food.name}")
-            self.fed = True
-        else:
-            print(f"{self.name} не стал есть {food.name}")
-            self.alive = False
+    pass  # Дополнительного поведения пока не требуется
+
 
 # Класс цветка, наследующий от Plant
 class Flower(Plant):
-    pass # Оставляем всё как есть, цветок по умлочанию несъедобный
+    pass  # Цветок по умолчанию несъедобный
+
+
 # Класс фруктов, наследующий от Plant
 class Fruit(Plant):
     def __init__(self, name):
         super().__init__(name)
-        self.edible = True # Фркуты съедобные
+        self.edible = True  # Фрукты съедобные
+
 
 # Создаем объекты
 a1 = Predator('Волк с Уолл-Стрит')
