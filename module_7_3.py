@@ -25,20 +25,16 @@ class WordsFinder:
 # finder = WordsFinder('test_file.txt')
 # print(finder.get_all_words())
 
-    def find(self, word):
+        def find(self, word):
         word = word.lower()
         results = {}
         all_words = self.get_all_words()
 
         for name, words in all_words.items():
             if word in words:
-                results[name] = words.index(word)
+                results[name] = words.index(word) + 1  # Возвращаем порядковый номер, а не индекс
 
         return results
-
-# Пример использования:
-# finder = WordsFinder('test_file.txt')
-# print(finder.find('TEXT'))
 
     def count(self, word):
         word = word.lower()
@@ -51,11 +47,7 @@ class WordsFinder:
         return results
 
 # Пример использования:
-# finder = WordsFinder('test_file.txt')
-# print(finder.count('teXT'))
-
-
 finder = WordsFinder('test_file.txt')
 print(finder.get_all_words())  # Все слова
-print(finder.find('TEXT'))     # Найти первое вхождение слова
-print(finder.count('teXT'))    # Подсчитать количество вхождений слова
+print(finder.find('TEXT'))  # Найти первое вхождение слова
+print(finder.count('teXT'))  # Подсчитать количество вхождений слова
