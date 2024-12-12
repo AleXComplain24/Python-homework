@@ -13,13 +13,15 @@ dp = Dispatcher(bot)
 @dp.message_handler(commands=['start'])
 async def start(message: Message):
     print('Привет! Я бот помогающий твоему здоровью.')
-    await message.reply("Привет! Я бот, помогающий твоему здоровью.")
+    # Отключаем ответ в Telegram
+    # await message.reply("Привет! Я бот, помогающий твоему здоровью.")
 
 # Обработчик всех остальных сообщений
 @dp.message_handler()
 async def all_messages(message: Message):
     print('Введите команду /start, чтобы начать общение.')
-    await message.reply("Введите команду /start, чтобы начать общение.")
+    # Отключаем ответ в Telegram
+    # await message.reply("Введите команду /start, чтобы начать общение.")
 
 # Запуск бота
 if __name__ == '__main__':
