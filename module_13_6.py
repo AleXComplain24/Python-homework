@@ -21,34 +21,31 @@ class UserState(StatesGroup):
     growth = State()
     weight = State()
 
+# Создание клавиатуры для команды /start
+start_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+button_calculate = KeyboardButton('Рассчитать')
+button_info = KeyboardButton('Информация')
+start_keyboard.add(button_calculate, button_info)
+
+# Создание Inline клавиатуры для расчёта калорий
+inline_keyboard = InlineKeyboardMarkup()
+button_calories = InlineKeyboardButton('Рассчитать норму калорий', callback_data='calories')
+button_formulas = InlineKeyboardButton('Формулы расчёта', callback_data='formulas')
+inline_keyboard.add(button_calories, button_formulas)
+
 # Обработчик команды /start
 @dp.message_handler(commands=['start'])
 async def start(message: Message):
-    # Создание клавиатуры
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-    button_calculate = KeyboardButton('Рассчитать')
-    button_info = KeyboardButton('Информация')
-    keyboard.add(button_calculate, button_info)
-
-    # Отправка приветственного сообщения с клавиатурой
-    await message.answer("Добро пожаловать! Выберите действие:", reply_markup=keyboard)
+    await message.answer("Добро пожаловать! Выберите действие:", reply_markup=start_keyboard)
 
 # Функция для обработки команды "Рассчитать"
 @dp.message_handler(Text(equals='Рассчитать', ignore_case=True))
 async def main_menu(message: Message):
-    # Создание Inline клавиатуры
-    inline_keyboard = InlineKeyboardMarkup()
-    button_calories = InlineKeyboardButton('Рассчитать норму калорий', callback_data='calories')
-    button_formulas = InlineKeyboardButton('Формулы расчёта', callback_data='formulas')
-    inline_keyboard.add(button_calories, button_formulas)
-
-    # Отправка Inline меню
     await message.answer("Выберите опцию:", reply_markup=inline_keyboard)
 
 # Функция для обработки кнопки "Формулы расчёта"
 @dp.callback_query_handler(lambda call: call.data == 'formulas')
 async def get_formulas(call: CallbackQuery):
-    # Упрощённая формула Миффлина-Сан Жеора
     formula = ("Формула Миффлина-Сан Жеора для мужчин:\n"
                "BMR = 10 × вес (кг) + 6.25 × рост (см) − 5 × возраст (лет) + 5\n\n"
                "Формула для женщин:\n"
@@ -94,11 +91,19 @@ async def send_calories(message: Message, state: FSMContext):
 async def info(message: Message):
     await message.answer("Этот бот помогает вычислить вашу норму калорий. Нажмите 'Рассчитать', чтобы начать.")
 
+# Обработчик всех остальных сообщений
+@dp.message_handler()
+async def all_messages(message: Message):
+    await message.answer("Введите /start, чтобы увидеть доступные команды или нажмите кнопку 'Рассчитать' для начала.")
+
 # Запуск бота
 if __name__ == '__main__':
     print("Бот запущен и готов к работе!")
     try:
         executor.start_polling(dp, skip_updates=True)
+    except Exception as e:
+        print(f"Ошибка: {e}")
+
     except Exception as e:
         print(f"Ошибка: {e}")
 
