@@ -8,7 +8,7 @@ from aiogram.types.callback_query import CallbackQuery
 from crud_functions import initiate_db, get_all_products  # Импортируем функции из файла
 
 # Замените 'YOUR_BOT_TOKEN' на токен вашего бота
-API_TOKEN = 'token'
+API_TOKEN = '7303606229:AAFGh4RqyzsIo0iRz6XFQ6eOJ40qLs5iQdo'
 
 # Инициализация бота и диспетчера
 bot = Bot(token=API_TOKEN)
@@ -37,13 +37,28 @@ for product in get_all_products():  # Создаем кнопки для каж�
 async def start(message: Message):
     await message.answer("Добро пожаловать! Выберите действие:", reply_markup=start_keyboard)
 
-# Обработчик кнопки "Купить"
 @dp.message_handler(Text(equals='Купить', ignore_case=True))
 async def get_buying_list(message: Message):
-    products = get_all_products()  # Получаем список продуктов из базы данных
-    for product in products:
-        product_id, title, description, price = product
-        await message.answer(f"Название: {title}\nОписание: {description}\nЦена: {price} руб.")
+    # 4 продукта, которые отправляются с изображениями
+    for i in range(1, 5):
+        product_name = f"Product {i}"
+        description = f"Описание {i}"
+        price = i * 100
+        image_path = f"Product_{i}.jpg"  # Путь к изображениям
+
+        # Попробуем отправить изображение, если файл существует
+        try:
+            with open(image_path, "rb") as img:
+                await message.answer_photo(
+                    img,
+                    caption=f"Название: {product_name}\nОписание: {description}\nЦена: {price} руб."
+                )
+        except FileNotFoundError:
+            await message.answer(
+                f"Название: {product_name}\nОписание: {description}\nЦена: {price} руб.\n[Изображение отсутствует]"
+            )
+
+    # Отправка Inline-клавиатуры после списка товаров
     await message.answer("Выберите продукт для покупки:", reply_markup=buying_keyboard)
 
 # Обработчик кнопок в Inline меню для покупки продукта
