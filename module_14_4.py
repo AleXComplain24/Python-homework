@@ -8,7 +8,7 @@ from aiogram.types.callback_query import CallbackQuery
 from crud_functions import initiate_db, get_all_products  # Импортируем функции из файла
 
 # Замените 'YOUR_BOT_TOKEN' на токен вашего бота
-API_TOKEN = '7303606229:AAFGh4RqyzsIo0iRz6XFQ6eOJ40qLs5iQdo'
+API_TOKEN = 'token'
 
 # Инициализация бота и диспетчера
 bot = Bot(token=API_TOKEN)
