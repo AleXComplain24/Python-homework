@@ -45,10 +45,13 @@ for i, id_ in enumerate(ids, start=1):
 conn.commit()
 
 # Удаление каждой 3-ей записи, начиная с первой строки (в терминах физического порядка)
-cursor.execute('SELECT * FROM Users')
+"""cursor.execute('SELECT * FROM Users')
 records = cursor.fetchall()
 ids_to_delete = [record[0] for i, record in enumerate(records, start=1) if i % 3 == 0]
 cursor.executemany('DELETE FROM Users WHERE id = ?', [(id_,) for id_ in ids_to_delete])
+conn.commit()"""
+
+cursor.execute("DELETE FROM Users WHERE id % 3 = 1")
 conn.commit()
 
 # Выборка всех записей, где возраст не равен 60
@@ -62,4 +65,3 @@ for record in final_records:
 
 # Закрытие соединения с базой данных
 conn.close()
-
