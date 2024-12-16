@@ -99,27 +99,30 @@ async def info(message: Message):
     await message.answer("Этот бот помогает вычислить вашу норму калорий. Нажмите 'Рассчитать', чтобы начать.")
 
 
-# Обработчик кнопки "Купить"
 @dp.message_handler(Text(equals='Купить', ignore_case=True))
 async def get_buying_list(message: Message):
-    for i in range(1, 5):  # 4 продукта
+    # 4 продукта, которые отправляются с изображениями
+    for i in range(1, 5):
         product_name = f"Product {i}"
         description = f"Описание {i}"
         price = i * 100
-        image_path = f"file/Product {i}.jpg"  # Путь к изображению продукта
+        image_path = f"Product_{i}.jpg"  # Путь к изображениям
 
         # Попробуем отправить изображение, если файл существует
         try:
             with open(image_path, "rb") as img:
                 await message.answer_photo(
                     img,
-                    caption=f"Название: {product_name}\nОписание: {description}\nЦена: {price} руб.",
-                    reply_markup=buying_keyboard
+                    caption=f"Название: {product_name}\nОписание: {description}\nЦена: {price} руб."
                 )
         except FileNotFoundError:
-            await message.answer(f"Название: {product_name}\nОписание: {description}\nЦена: {price} руб.")
+            await message.answer(
+                f"Название: {product_name}\nОписание: {description}\nЦена: {price} руб.\n[Изображение отсутствует]"
+            )
 
+    # Отправка Inline-клавиатуры после списка товаров
     await message.answer("Выберите продукт для покупки:", reply_markup=buying_keyboard)
+
 
 # Обработчик кнопки в Inline меню "product_buying"
 @dp.callback_query_handler(lambda call: call.data == 'product_buying')
@@ -138,4 +141,5 @@ if __name__ == '__main__':
         executor.start_polling(dp, skip_updates=True)
     except Exception as e:
         print(f"Ошибка: {e}")
+
 
