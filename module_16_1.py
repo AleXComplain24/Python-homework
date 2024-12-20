@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 
 # Создание объекта FastAPI
 app = FastAPI()
@@ -21,4 +22,8 @@ def read_user(user_id: int) -> str:
 # Маршрут для страницы пользователя с передачей параметров через адресную строку
 @app.get("/user")
 def user_info(username: str, age: int) -> str:
-    return f"Информация о пользователе. Имя: {username}, Возраст: {age}"
+    return f"Информация о пользователе. Имя: {username}, Возраст: {age}."
+
+# Запуск приложения
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
